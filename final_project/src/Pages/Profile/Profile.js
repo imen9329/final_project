@@ -5,7 +5,7 @@ import ModalEdit from "../../Components/Modal/Modal";
 
 import "./Profile.css";
 
-const Profile = () => {
+const Profile = ({ history }) => {
     const user = useSelector((state) => state.userReducer.user);
     const role = useSelector((state) => state.userReducer.user.role);
 
@@ -58,7 +58,7 @@ const Profile = () => {
                                 <div className="d-flex align-items-center justify-content-between mb-3">
                                     <h5 className="mb-0">Recent products</h5>
                                     <div>
-                                        <AddProduct />
+                                        <AddProduct history={history} />
                                     </div>
                                 </div>
                             ) : null}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { productAdd } from "../../Redux/Actions/productActions";
-const AddProduct = () => {
+const AddProduct = ({ history }) => {
     const dispatch = useDispatch();
     const [show, setShow] = useState(false);
     const [addProduct, setAddProduct] = useState({});
@@ -14,7 +14,7 @@ const AddProduct = () => {
     };
     const handleAddProduct = (e) => {
         e.preventDefault();
-        dispatch(productAdd(addProduct));
+        dispatch(productAdd(addProduct, history));
         handleClose();
     };
     return (

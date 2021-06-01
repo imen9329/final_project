@@ -38,10 +38,11 @@ export const listProductDetails = (id) => async (dispatch) => {
     try {
         const { data } = await axios.get(`/api/product/${id}`);
 
-        dispatch({
+        await dispatch({
             type: PRODUCT_DETAILS_SUCCESS,
             payload: data,
         });
+        console.log(data);
     } catch (error) {
         dispatch({
             type: PRODUCT_DETAILS_FAIL,
@@ -53,14 +54,18 @@ export const listProductDetails = (id) => async (dispatch) => {
     }
 };
 
-export const productAdd =
-    ({ product }) =>
-    async (dispatch) => {
-        dispatch({ type: PRODUCT_ADD_LOAD });
-        try {
-            const result = await axios.post("/api/product", product);
-            dispatch({ type: PRODUCT_ADD_SUCCESS, payload: result.data });
-        } catch (error) {
-            dispatch({ type: PRODUCT_ADD_FAIL, payload: error.response.data });
-        }
+export const productAdd = (product, history) => async (dispatch) => {
+    dispatch({ type: PRODUCT_ADD_LOAD });
+    const config = {
+        headers: {
+            authorization: localStorage.getItem("token"),
+        },
     };
+    try {
+        const result = await axios.post("/api/product", product);
+        dispatch({ type: PRODUCT_ADD_SUCCESS, payload: result.data, config });
+        history.push("/");
+    } catch (error) {
+        dispatch({ type: PRODUCT_ADD_FAIL, payload: error.data });
+    }
+};

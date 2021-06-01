@@ -10,9 +10,10 @@ import {
     PRODUCT_ADD_FAIL,
 } from "../Constants/product";
 const initialState = {
-    products: {},
+    products: [],
     errors: [],
     loading: false,
+    product: {},
 };
 
 export const productList = (state = initialState, { type, payload }) => {
@@ -23,24 +24,14 @@ export const productList = (state = initialState, { type, payload }) => {
             return { ...state, loading: false, products: payload };
         case PRODUCT_LIST_FAIL:
             return { ...state, loading: false, errors: payload };
-        default:
-            return { state };
-    }
-};
-
-export const productDetailsReducer = (
-    state = { product: { reviews: [] } },
-    { type, payload }
-) => {
-    switch (type) {
         case PRODUCT_DETAILS_LOAD:
             return { loading: true, ...state };
         case PRODUCT_DETAILS_SUCCESS:
-            return { loading: false, product: payload };
+            return { loading: false, product: payload, ...state };
         case PRODUCT_DETAILS_FAIL:
-            return { loading: false, error: payload };
+            return { loading: false, error: payload, ...state };
         default:
-            return { state };
+            return state;
     }
 };
 
@@ -49,11 +40,11 @@ export const productAddReducer = (state = initialState, { type, payload }) => {
         case PRODUCT_ADD_LOAD:
             return { loading: true, ...state };
         case PRODUCT_ADD_SUCCESS:
-            return { loading: false, product: payload };
+            return { loading: false, product: payload, ...state };
         case PRODUCT_ADD_FAIL:
-            return { loading: false, error: payload };
+            return { loading: false, error: payload, ...state };
 
         default:
-            return { state };
+            return state;
     }
 };
