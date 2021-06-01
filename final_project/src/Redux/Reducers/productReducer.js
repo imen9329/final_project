@@ -1,0 +1,59 @@
+import {
+    PRODUCT_LIST_LOAD,
+    PRODUCT_LIST_SUCCESS,
+    PRODUCT_LIST_FAIL,
+    PRODUCT_DETAILS_LOAD,
+    PRODUCT_DETAILS_SUCCESS,
+    PRODUCT_DETAILS_FAIL,
+    PRODUCT_ADD_LOAD,
+    PRODUCT_ADD_SUCCESS,
+    PRODUCT_ADD_FAIL,
+} from "../Constants/product";
+const initialState = {
+    products: {},
+    errors: [],
+    loading: false,
+};
+
+export const productList = (state = initialState, { type, payload }) => {
+    switch (type) {
+        case PRODUCT_LIST_LOAD:
+            return { ...state, loading: true };
+        case PRODUCT_LIST_SUCCESS:
+            return { ...state, loading: false, products: payload };
+        case PRODUCT_LIST_FAIL:
+            return { ...state, loading: false, errors: payload };
+        default:
+            return { state };
+    }
+};
+
+export const productDetailsReducer = (
+    state = { product: { reviews: [] } },
+    { type, payload }
+) => {
+    switch (type) {
+        case PRODUCT_DETAILS_LOAD:
+            return { loading: true, ...state };
+        case PRODUCT_DETAILS_SUCCESS:
+            return { loading: false, product: payload };
+        case PRODUCT_DETAILS_FAIL:
+            return { loading: false, error: payload };
+        default:
+            return { state };
+    }
+};
+
+export const productAddReducer = (state = initialState, { type, payload }) => {
+    switch (type) {
+        case PRODUCT_ADD_LOAD:
+            return { loading: true, ...state };
+        case PRODUCT_ADD_SUCCESS:
+            return { loading: false, product: payload };
+        case PRODUCT_ADD_FAIL:
+            return { loading: false, error: payload };
+
+        default:
+            return { state };
+    }
+};
