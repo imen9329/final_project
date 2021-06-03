@@ -63,13 +63,14 @@ export const removeProduct = async (req, res) => {
 export const createProductReview = async (req, res) => {
     try {
         const { id } = req.params;
-        const { rating, comment } = req.body;
+        const { rating, comment, userId } = req.body;
 
         const product = await Product.findById({ _id: id });
+        const user = await User.findById({ _id: userId });
 
         if (product) {
             const alreadyReviewed = product.reviews.find(
-                (r) => r.user.toString() === req.user._id.toString()
+                (r) => r.userId.toString() === userId.toString()
             );
 
             if (alreadyReviewed) {
@@ -77,10 +78,10 @@ export const createProductReview = async (req, res) => {
             }
 
             const review = {
-                name: req.user.name,
+                name: user.name,
                 rating: Number(rating),
-                comment,
-                user: req.user._id,
+                comment: comment,
+                userId: req.user._id,
             };
 
             product.reviews.push(review);

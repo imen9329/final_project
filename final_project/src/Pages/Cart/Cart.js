@@ -14,25 +14,25 @@ import Message from "../../Components/Message";
 import { addToCart, removeFromCart } from "../../Redux/Actions/cartActions";
 
 const Cart = ({ match, location, history }) => {
+    const dispatch = useDispatch();
     const productId = match.params.id;
-
     const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
-    const dispatch = useDispatch();
-
-    const cart = useSelector((state) => state.cart);
+    const cart = useSelector((state) => state.cartReducer);
     const { cartItems } = cart;
 
     useEffect(() => {
         if (productId) {
             dispatch(addToCart(productId, qty));
         }
-    }, [dispatch, productId, qty]);
+    }, [dispatch, qty]);
 
-    const removeFromCartHandler = (id) => {
+    const handleRemoveFromCart = (id) => {
         dispatch(removeFromCart(id));
     };
-
+    const handleCheckOut = (e) => {
+        history.push("/checkout");
+    };
     return (
         <Row>
             <Col md={8}>
@@ -43,66 +43,74 @@ const Cart = ({ match, location, history }) => {
                     </Message>
                 ) : (
                     <ListGroup variant="flush">
-                        {cartItems.map((item) => (
-                            <ListGroup.Item key={item.product}>
-                                <Row>
-                                    <Col md={2}>
-                                        <Image
-                                            src={item.image}
-                                            alt={item.name}
-                                            fluid
-                                            rounded
-                                        />
-                                    </Col>
-                                    <Col md={3}>
-                                        <Link to={`/product/${item.product}`}>
-                                            {item.name}
-                                        </Link>
-                                    </Col>
-                                    <Col md={2}> TND {item.price}</Col>
-                                    <Col md={2}>
-                                        <Form.Control
-                                            as="select"
-                                            value={item.qty}
-                                            onChange={(e) =>
-                                                dispatch(
-                                                    addToCart(
-                                                        item.product,
-                                                        Number(e.target.value)
+                        {cartItems &&
+                            cartItems.map((item) => (
+                                <ListGroup.Item>
+                                    <Row>
+                                        <Col md={2}>
+                                            <Image
+                                                src={item.image}
+                                                alt={item.name}
+                                                fluid
+                                                rounded
+                                            />
+                                        </Col>
+                                        <Col md={3}>
+                                            <Link
+                                                to={`/product/${item.product}`}
+                                            >
+                                                {item && item.name}
+                                            </Link>
+                                        </Col>
+                                        <Col md={2}>
+                                            {" "}
+                                            TND {item && item.price}
+                                        </Col>
+                                        <Col md={2}>
+                                            <Form.Control
+                                                as="select"
+                                                value={item && item.qty}
+                                                onChange={(e) =>
+                                                    dispatch(
+                                                        addToCart(
+                                                            item.product,
+                                                            Number(
+                                                                e.target.value
+                                                            )
+                                                        )
                                                     )
-                                                )
-                                            }
-                                        >
-                                            {[
-                                                ...Array(
-                                                    item.countInStock
-                                                ).keys(),
-                                            ].map((x) => (
-                                                <option
-                                                    key={x + 1}
-                                                    value={x + 1}
-                                                >
-                                                    {x + 1}
-                                                </option>
-                                            ))}
-                                        </Form.Control>
-                                    </Col>
-                                    <Col md={2}>
-                                        <Button
-                                            type="button"
-                                            variant="light"
-                                            onClick={() =>
-                                                removeFromCartHandler(
-                                                    item.product
-                                                )
-                                            }
-                                        >
-                                            <i className="fas fa-trash"></i>
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </ListGroup.Item>
-                        ))}
+                                                }
+                                            >
+                                                {[
+                                                    ...Array(
+                                                        item.countInStock
+                                                    ).keys(),
+                                                ].map((x) => (
+                                                    <option
+                                                        key={x + 1}
+                                                        value={x + 1}
+                                                    >
+                                                        {x + 1}
+                                                    </option>
+                                                ))}
+                                            </Form.Control>
+                                        </Col>
+                                        <Col md={2}>
+                                            <Button
+                                                type="button"
+                                                variant="light"
+                                                onClick={() =>
+                                                    handleRemoveFromCart(
+                                                        item.product
+                                                    )
+                                                }
+                                            >
+                                                <i className="fas fa-trash"></i>
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </ListGroup.Item>
+                            ))}
                     </ListGroup>
                 )}
             </Col>
@@ -131,9 +139,9 @@ const Cart = ({ match, location, history }) => {
                                 type="button"
                                 className="btn-block"
                                 disabled={cartItems.length === 0}
-                                // onClick={checkoutHandler}
+                                onClick={handleCheckOut}
                             >
-                                Proceed To Checkout
+                                Confirm to buy
                             </Button>
                         </ListGroup.Item>
                     </ListGroup>

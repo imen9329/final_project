@@ -8,12 +8,15 @@ import {
     PRODUCT_ADD_LOAD,
     PRODUCT_ADD_SUCCESS,
     PRODUCT_ADD_FAIL,
+    PRODUCT_RATE_LOAD,
+    PRODUCT_RATE_SUCCESS,
+    PRODUCT_RATE_FAIL,
 } from "../Constants/product";
 const initialState = {
     products: [],
     errors: [],
     loading: false,
-    product: {},
+    review: [],
 };
 
 export const productList = (state = initialState, { type, payload }) => {
@@ -42,6 +45,23 @@ export const productAddReducer = (state = initialState, { type, payload }) => {
         case PRODUCT_ADD_SUCCESS:
             return { loading: false, product: payload, ...state };
         case PRODUCT_ADD_FAIL:
+            return { loading: false, error: payload, ...state };
+
+        default:
+            return state;
+    }
+};
+
+export const productReviewReducer = (
+    state = initialState,
+    { type, payload }
+) => {
+    switch (type) {
+        case PRODUCT_RATE_LOAD:
+            return { loading: true, ...state };
+        case PRODUCT_RATE_SUCCESS:
+            return { loading: false, review: payload, ...state };
+        case PRODUCT_RATE_FAIL:
             return { loading: false, error: payload, ...state };
 
         default:

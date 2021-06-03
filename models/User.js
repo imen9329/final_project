@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema(
         phone: { type: Number, required: true },
         password: { type: String, required: true },
         role: { type: String, default: "user" },
+        cart: { type: Array, default: [] },
     },
     {
         timestamps: true,

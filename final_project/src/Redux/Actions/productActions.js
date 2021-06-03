@@ -9,6 +9,9 @@ import {
     PRODUCT_ADD_LOAD,
     PRODUCT_ADD_SUCCESS,
     PRODUCT_ADD_FAIL,
+    PRODUCT_RATE_LOAD,
+    PRODUCT_RATE_SUCCESS,
+    PRODUCT_RATE_FAIL,
 } from "../Constants/product";
 
 export const listProducts = () => async (dispatch) => {
@@ -67,5 +70,25 @@ export const productAdd = (product, history) => async (dispatch) => {
         history.push("/");
     } catch (error) {
         dispatch({ type: PRODUCT_ADD_FAIL, payload: error.data });
+    }
+};
+
+export const productRate = (id, review, history) => async (dispatch) => {
+    dispatch({ type: PRODUCT_RATE_LOAD });
+    const config = {
+        headers: {
+            authorization: localStorage.getItem("token"),
+        },
+    };
+    try {
+        const result = await axios.post(
+            `/api/product/reviews/${id}`,
+            review,
+            config
+        );
+        dispatch({ type: PRODUCT_RATE_SUCCESS, payload: result.data });
+        history.push("/");
+    } catch (error) {
+        dispatch({ type: PRODUCT_RATE_FAIL, payload: error.data });
     }
 };

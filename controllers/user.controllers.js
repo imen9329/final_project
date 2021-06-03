@@ -162,3 +162,38 @@ export const getProviders = async (req, res) => {
         res.status(500).send({ msg: "server error" });
     }
 };
+
+// ADD to cart
+
+export const addToCart = async (req, res) => {
+    try {
+        const newProduct = reg.body.newProduct;
+        const user = await User.findOne({ _id: req.params.id });
+        if (user) {
+            const productExist = user.cart.find(
+                (e) => e._id === newProduct._id
+            );
+            if (productExist) {
+                res.status(401).send({ msg: "product already in cart" });
+            }
+            let x = [...user.cart, newProduct];
+            await User.findByIdAndUpdate({ _id: req.params.id }, { cart: x });
+            res.status(200).send({ msg: "product added to cart" });
+        }
+    } catch (error) {
+        res.status(500).send({ msg: "fail to add product to cart" });
+    }
+};
+
+export const removeFromCart = async (req, res) => {
+    try {
+        const productToRemove = req.body.productToRemove;
+        const user = await User.findOne({ _id: req.params.id });
+        const x = user.cart;
+        const y = x.filter((el) => el._id !== productToRemove._id);
+        await User.findByIdAndUpdate({ _id: req.params.id }, { cart: y });
+        res.status(200).send({ msg: "product removed from cart" });
+    } catch (error) {
+        res.status(500).send({ msg: "fail to remove product from cart" });
+    }
+};

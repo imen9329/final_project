@@ -11,8 +11,11 @@ import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import PrivateRoute from "./router/PrivateRoute";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
+import Cart from "./Pages/Cart/Cart";
 import { current } from "./Redux/Actions/userActions";
 import { listProducts } from "./Redux/Actions/productActions";
+import Review from "./Components/Review/ReviewCard";
+import CheckOut from "./Pages/CheckOut/CheckOut";
 
 function App() {
     const dispatch = useDispatch();
@@ -30,6 +33,10 @@ function App() {
                 <Route path="/register" component={Register} />
                 <Route path="/login" component={Login} />
                 <PrivateRoute path="/profile" component={Profile} />
+                <Route path="/cart" component={Cart} />
+                <Route path="/reviews/:id" component={Review} />
+                <Route path="/checkout" component={CheckOut} />
+
                 <Route path="/*" component={Errors} />
             </Switch>
             <Footer />
