@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Register.css";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-
 import { register } from "../../Redux/Actions/userActions";
 const Register = ({ history }) => {
     const [user, setUser] = useState({});
@@ -76,13 +75,22 @@ const Register = ({ history }) => {
                     </div>
                     <div className="form-group">
                         <input
-                            type="text"
-                            className="form-control item"
-                            id="role"
-                            placeholder="role (user or provider)"
+                            type="radio"
                             name="role"
+                            value="user"
+                            label="user"
                             onChange={handleChange}
-                        />
+                        />{" "}
+                        <span>user</span>
+                        <br />
+                        <input
+                            type="radio"
+                            name="role"
+                            value="provider"
+                            label="provider"
+                            onChange={handleChange}
+                        />{" "}
+                        <span>provider</span>
                     </div>
                     <div className="form-group">
                         <button

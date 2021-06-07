@@ -17,6 +17,7 @@ export const register = (user, history) => async (dispatch) => {
 
         history.push("/profile");
     } catch (error) {
+        error.response.data.errors.map((el) => alert(el.msg));
         dispatch({ type: FAIL_USER, payload: error.response.data });
     }
 };
